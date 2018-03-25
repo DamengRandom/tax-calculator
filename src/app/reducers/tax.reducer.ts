@@ -1,9 +1,14 @@
 import { Action } from '@ngrx/store';
+import 'rxjs/Rx';
 // action
 import * as TaxActions from '../actions/tax.actions';
 import { Tax } from '../models/tax.model';
 
 export type Action = TaxActions.All;
+
+export interface UnsafeAction extends Action {
+  payload: Tax;
+}
 
 // initial default state 
 const defaultState: Tax = {
@@ -18,24 +23,24 @@ const newState = (state, action) => {
   return Object.assign({}, state, action.payload); // build up a new object 
 }
 
-export function taxReducer(state: Tax = defaultState, action: Action){
-  console.log("hahhaa: ", action.type, state, action);
+export function taxReducer(state: Tax = defaultState, action: UnsafeAction){
+  let payload = action.payload; // Error reported: https://toddmotto.com/ngrx-store-actions-versus-action-creators
   switch(action.type) {
     case TaxActions.ADD_CALCULATE:
       return newState(state, {
-        finalGross: action.payload.finalGross,
-        netVal: action.payload.netVal,
-        superVal: action.payload.superVal,
-        taxVal: action.payload.taxVal,
-        netSuperVal: action.payload.netSuperVal
+        finalGross: payload.finalGross,
+        netVal: payload.netVal,
+        superVal: payload.superVal,
+        taxVal: payload.taxVal,
+        netSuperVal: payload.netSuperVal
       });
     case TaxActions.VIEW_CALCULATE:
       let latestState = {
-        finalGross: action.payload.finalGross,
-        netVal: action.payload.netVal,
-        superVal: action.payload.superVal,
-        taxVal: action.payload.taxVal,
-        netSuperVal: action.payload.netSuperVal
+        finalGross: payload.finalGross,
+        netVal: payload.netVal,
+        superVal: payload.superVal,
+        taxVal: payload.taxVal,
+        netSuperVal: payload.netSuperVal
       };
       return latestState;
     default: 
