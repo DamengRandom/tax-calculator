@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { MatButtonModule,  MatFormFieldModule, MatInputModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatToolbarModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 
 // reducer
@@ -26,6 +26,7 @@ import { HomeComponent } from './components/home/home.component';
     FormsModule,
     FlexLayoutModule,
     MatButtonModule,
+    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatToolbarModule,

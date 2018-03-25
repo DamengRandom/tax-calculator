@@ -3,40 +3,49 @@
   <mat-toolbar-row>
     <h2 class="text-center">Tax Calculator: </h2>
   </mat-toolbar-row>
-  <mat-toolbar-row>
-    <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%" fxLayoutAlign="center">
-      <div fxFlex="80%">
-        <mat-form-field class="tax-input">
-          <input matInput 
-            placeholder="Enter gross amount ( > 0)" 
-            type="number"
-            [(ngModel)]="grossVal">
-        </mat-form-field>
-        <mat-form-field class="tax-input">
-          <input matInput 
-            placeholder="Enter gross + super amount ( > 0)" 
-            type="number"
-            [(ngModel)]="grossSuperVal">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput 
-            placeholder="Enter superannuation (>= 9.5)" 
-            type="number"
-            required
-            [(ngModel)]="superPercent">
-        </mat-form-field>
-        <button button="submit" mat-raised-button color="primary" (click)="statesData()">
-          Calculate
-        </button>
-      </div>
+</mat-toolbar>
+<mat-card>
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%" fxLayoutAlign="center">
+    <div fxFlex="80%">
+      <mat-form-field class="tax-input">
+        <input matInput 
+          placeholder="Enter gross amount ( > 0)" 
+          type="number"
+          [(ngModel)]="grossVal">
+        <span matPrefix>$&nbsp;</span>
+      </mat-form-field>
+      <mat-form-field class="tax-input">
+        <input matInput 
+          placeholder="Enter gross + super amount ( > 0)" 
+          type="number"
+          [(ngModel)]="grossSuperVal">
+        <span matPrefix>$&nbsp;</span>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput 
+          placeholder="Enter superannuation (>= 9.5)" 
+          type="number"
+          required
+          [(ngModel)]="superPercent">
+        <span matSuffix>%</span>
+      </mat-form-field>
+      <button button="submit" 
+        mat-raised-button 
+        color="primary" 
+        (click)="getOutputs()"
+        [disabled]="abledSubmit()">
+        Calculate
+      </button>
     </div>
-  </mat-toolbar-row>
-  <mat-toolbar-row *ngIf="isValueValid()">
-    {{ validationSMS }}
-  </mat-toolbar-row>
-  <mat-toolbar-row>
-    <h5 class="text-center">Output Results:</h5>
-  </mat-toolbar-row>
+  </div>
+</mat-card>
+
+<mat-card *ngIf="isValueValid()">
+  <p>{{ validationSMS }}</p>
+</mat-card>
+
+<mat-card>
+  <h5 class="text-center">Output Results:</h5>
   <div *ngIf="tax | async as t">
     <p *ngIf="superVal > 0">Superannuation Amount: {{ t.superVal }}</p>
     <p *ngIf="grossSuperVal > 0 && superVal > 0">Gross Amount: {{ t.finalGross }}</p>
@@ -45,16 +54,4 @@
     <p *ngIf="netVal >= 0">Net Income (Exclude with medicare tax): {{ t.netVal }}</p>
     <p *ngIf="netVal >= 0 && superVal > 0">Net + Super Total Income: {{ t.netSuperVal }}</p>
   </div>
-
-  <!-- <mat-toolbar-row>
-    <p>Output: {{ message$ | async }}</p>
-    <button (click)="callSpanish()">Spanish</button>
-    <button (click)="callCHINESE()">CHINESE</button>
-  </mat-toolbar-row>
-  <mat-toolbar-row>
-    <p *ngIf="post | async as p">Votes: <span >{{ p.likes }}</span></p>
-    <button (click)="upvote()">Upvote</button>
-    <button (click)="downvote()">downvote</button>
-    <button (click)="resetPost()">Reset</button>
-  </mat-toolbar-row> -->
-</mat-toolbar>
+</mat-card>

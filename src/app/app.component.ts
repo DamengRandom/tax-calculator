@@ -5,11 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { Tax } from './models/tax.model';
 import * as TaxActions from './actions/tax.actions';
 
-// interface AppState {
-//   message: string;
-//   post: Post;
-// }
-
 interface TaxState {
   tax: Tax
 }
@@ -21,15 +16,11 @@ interface TaxState {
 })
 
 export class AppComponent {
+  // general variables define
   title = 'Tax Calculator';
-
-  // message$: Observable<string>;
-  // post: Observable<Post>;
   tax: Observable<Tax>;
 
-  // likes: number = 0;
-  // text: string;
-
+  // tax calculation variables define
   grossVal: number;
   finalGross: number;
   grossSuperVal: number;
@@ -41,42 +32,13 @@ export class AppComponent {
   taxVal: number;
   netSuperVal: number;
   
+  // validation variables define
   isSMSShown: boolean = false; 
-  
   validationSMS: string = "Please enter income and super values";
 
   constructor(private store: Store<TaxState>){
-    // this.message$ = this.store.select('message');
-    // console.log("this.message$: ", this.message$);
-    // this.post = this.store.select('post');
-    // console.log("this.post: ", this.post);
     this.tax = this.store.select('tax');
-    console.log("this.tax: ", this.tax);
   }
-
-  // callSpanish(){
-  //   this.store.dispatch({ type: 'SPANISH' });
-  //   // console.log("wahahha: ", this.store.dispatch({ type: 'SPANISH' }));
-  // }
-
-  // callCHINESE(){
-  //   this.store.dispatch({ type: 'CHINESE' });
-  // }
-
-  // // post vote
-  // // editPost() {
-  // //   this.store.dispatch(new PostActions.EditText(this.text));
-  // // }
-  // upvote() {
-  //   this.store.dispatch(new PostActions.Upvote());
-  //   console.log("dispatch: ", new PostActions.Upvote());
-  // }
-  // downvote() {
-  //   this.store.dispatch(new PostActions.Downvote());
-  // }
-  // resetPost() {
-  //   this.store.dispatch(new PostActions.Reset());
-  // }
 
   // value validations
   isValueValid() {
@@ -84,14 +46,19 @@ export class AppComponent {
       this.isSMSShown = true;
       this.validationSMS = "Oops, please neter a positive value";
       return this.isSMSShown;
-    }else if(this.superPercent < 9.5) {
+    }else if(this.superPercent >= 0 && this.superPercent < 9.5) {
       this.isSMSShown = true;
       this.validationSMS = "Oops, please ensure the super value is >= 9.5";
       return this.isSMSShown;
     }else {
-      this.isSMSShown = false;
+      this.isSMSShown = false
+      return this.isSMSShown;
     }
   } 
+  abledSubmit() {
+    return ((this.grossSuperVal > 0 || this.grossVal > 0) && this.superPercent >= 9.5) ? false : true;
+  }
+
   // value calculates
   calculator(){
     // cal super
@@ -135,7 +102,7 @@ export class AppComponent {
   }
   
   // save calculated data to state
-  statesData(){
+  getOutputs(){
     this.calculator();
     var finalOutput = {
       finalGross: this.finalGross,
@@ -145,14 +112,6 @@ export class AppComponent {
       netSuperVal: this.netSuperVal,
     }
     this.store.dispatch(new TaxActions.AddCalculate(finalOutput));
-    // this.store.dispatch({
-    //   type: new TaxActions.AddCalculate(),
-    //   payload: finalOutput
-    // });
     this.store.dispatch(new TaxActions.ViewCalculate(finalOutput));
-    // this.store.subscribe((data) => {
-    //   console.log("data? ", data);
-    //   return data;
-    // });
   }
 }
