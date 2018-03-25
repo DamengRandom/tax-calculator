@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import 'rxjs/Rx';
 // action
 import * as TaxActions from '../actions/tax.actions';
 import { Tax } from '../models/tax.model';
@@ -19,23 +20,23 @@ const newState = (state, action) => {
 }
 
 export function taxReducer(state: Tax = defaultState, action: Action){
-  console.log("hahhaa: ", action.type, state, action);
+  let payload = action.payload;
   switch(action.type) {
     case TaxActions.ADD_CALCULATE:
       return newState(state, {
-        finalGross: action.payload.finalGross,
-        netVal: action.payload.netVal,
-        superVal: action.payload.superVal,
-        taxVal: action.payload.taxVal,
-        netSuperVal: action.payload.netSuperVal
+        finalGross: payload.finalGross,
+        netVal: payload.netVal,
+        superVal: payload.superVal,
+        taxVal: payload.taxVal,
+        netSuperVal: payload.netSuperVal
       });
     case TaxActions.VIEW_CALCULATE:
       let latestState = {
-        finalGross: action.payload.finalGross,
-        netVal: action.payload.netVal,
-        superVal: action.payload.superVal,
-        taxVal: action.payload.taxVal,
-        netSuperVal: action.payload.netSuperVal
+        finalGross: payload.finalGross,
+        netVal: payload.netVal,
+        superVal: payload.superVal,
+        taxVal: payload.taxVal,
+        netSuperVal: payload.netSuperVal
       };
       return latestState;
     default: 

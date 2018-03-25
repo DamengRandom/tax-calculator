@@ -1,27 +1,40 @@
-<!--The content below is only a placeholder and can be replaced.-->
+
 <mat-toolbar>
   <mat-toolbar-row>
     <h2 class="text-center">Tax Calculator: </h2>
   </mat-toolbar-row>
 </mat-toolbar>
+
 <mat-card>
   <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%" fxLayoutAlign="center">
     <div fxFlex="80%">
-      <mat-form-field class="tax-input">
+      <mat-form-field class="input-value">
         <input matInput 
           placeholder="Enter gross amount ( > 0)" 
           type="number"
+          required
+          [disabled]="grossSuperVal > 0"
           [(ngModel)]="grossVal">
         <span matPrefix>$&nbsp;</span>
       </mat-form-field>
-      <mat-form-field class="tax-input">
+    </div>
+  </div>
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%" fxLayoutAlign="center">
+    <div fxFlex="80%">
+      <mat-form-field class="input-value">
         <input matInput 
           placeholder="Enter gross + super amount ( > 0)" 
           type="number"
+          required
+          [disabled]="grossVal > 0"
           [(ngModel)]="grossSuperVal">
         <span matPrefix>$&nbsp;</span>
       </mat-form-field>
-      <mat-form-field>
+    </div>
+  </div>
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%" fxLayoutAlign="center">
+    <div fxFlex="80%">
+      <mat-form-field class="input-value">
         <input matInput 
           placeholder="Enter superannuation (>= 9.5)" 
           type="number"
@@ -29,7 +42,12 @@
           [(ngModel)]="superPercent">
         <span matSuffix>%</span>
       </mat-form-field>
+    </div>
+  </div>
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%" fxLayoutAlign="center">
+    <div fxFlex="40%">  
       <button button="submit" 
+        class="input-value"
         mat-raised-button 
         color="primary" 
         (click)="getOutputs()"
@@ -45,13 +63,19 @@
 </mat-card>
 
 <mat-card>
-  <h5 class="text-center">Output Results:</h5>
-  <div *ngIf="tax | async as t">
-    <p *ngIf="superVal > 0">Superannuation Amount: {{ t.superVal }}</p>
-    <p *ngIf="grossSuperVal > 0 && superVal > 0">Gross Amount: {{ t.finalGross }}</p>
-    <p *ngIf="grossVal > 0 && superVal > 0">Gross + Super Amount: {{ t.finalGross }}</p>
-    <p *ngIf="taxVal >= 0">Tax Amount (Exclude with medicare tax): {{ t.taxVal }}</p>
-    <p *ngIf="netVal >= 0">Net Income (Exclude with medicare tax): {{ t.netVal }}</p>
-    <p *ngIf="netVal >= 0 && superVal > 0">Net + Super Total Income: {{ t.netSuperVal }}</p>
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%" fxLayoutAlign="center">
+    <div fxFlex="80%">
+      <h4 class="text-center">Output Results:</h4>
+      <p class="text-center"
+        *ngIf="(!grossVal || !grossSuperVal) && !superPercent">Result will be shown after calculated</p>
+      <div *ngIf="tax | async as t">
+        <p *ngIf="superVal > 0"><b>Superannuation Amount: </b> ${{ t.superVal }}</p>
+        <p *ngIf="grossSuperVal > 0 && superVal > 0"><b>Gross Amount: </b> ${{ t.finalGross }}</p>
+        <p *ngIf="grossVal > 0 && superVal > 0"><b>Gross + Super Amount: </b> {{ t.finalGross }}</p>
+        <p *ngIf="taxVal >= 0"><b>Tax Amount (Exclude with medicare tax): </b> ${{ t.taxVal }}</p>
+        <p *ngIf="netVal >= 0"><b>Net Income (Exclude with medicare tax): </b> ${{ t.netVal }}</p>
+        <p *ngIf="netVal >= 0 && superVal > 0"><b>Net + Super Total Income: </b> ${{ t.netSuperVal }}</p>
+      </div>
+    </div>
   </div>
 </mat-card>
