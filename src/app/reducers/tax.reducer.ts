@@ -6,6 +6,10 @@ import { Tax } from '../models/tax.model';
 
 export type Action = TaxActions.All;
 
+export interface UnsafeAction extends Action {
+  payload: Tax;
+}
+
 // initial default state 
 const defaultState: Tax = {
   finalGross: 0,
@@ -19,8 +23,8 @@ const newState = (state, action) => {
   return Object.assign({}, state, action.payload); // build up a new object 
 }
 
-export function taxReducer(state: Tax = defaultState, action: Action){
-  let payload = action.payload;
+export function taxReducer(state: Tax = defaultState, action: UnsafeAction){
+  let payload = action.payload; // Error reported: https://toddmotto.com/ngrx-store-actions-versus-action-creators
   switch(action.type) {
     case TaxActions.ADD_CALCULATE:
       return newState(state, {
